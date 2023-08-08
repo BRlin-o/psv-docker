@@ -1,30 +1,21 @@
 version: '3'
 services:
-  psv:
+  updater:
     build:
-      context: ./src/Backend
+      context: ./src/backend
       dockerfile: Dockerfile
     volumes:
-      - ./src/Backend:/app
-      - ./envs:/app/envs
+      - ./src/backend:/app
     ports:
       - 5000:5000
 
   web:
     build:
-      context: ./src/Frontend
+      context: ./src/frontend
       dockerfile: Dockerfile
     volumes:
-      - ./src/Frontend:/app
-    ports:
-      - 3000:3000
-
-  nginx:
-    build:
-      context: ./nginx
-      dockerfile: Dockerfile
+      - ./src/frontend:/app
     ports:
       - 8080:80
     depends_on:
-      - psv
-      - web
+      - updater
