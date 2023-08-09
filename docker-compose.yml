@@ -4,6 +4,8 @@ services:
     build:
       context: ./src/backend
       dockerfile: Dockerfile
+    env_file:
+      - .env
     volumes:
       - ./src/backend:/app
     ports:
@@ -19,3 +21,31 @@ services:
       - 8080:80
     depends_on:
       - updater
+
+
+  mysql:
+    image: mysql:8.0
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+    volumes:
+      - mysql-data:/var/lib/mysql
+      - ./mysql/init:/docker-entrypoint-initdb.d
+    ports:
+      - 3306:3306
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    environment:
+      PMA_HOST: mysql
+      PMA_USER: ${MYSQL_USER}
+      PMA_PASSWORD: ${MYSQL_PASSWORD}  # Use the same password as MYSQL_PASSWORD
+    ports:
+      - 8081:80
+    depends_on:
+      - mysql
+
+volumes:
+  mysql-data:
