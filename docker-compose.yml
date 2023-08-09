@@ -13,8 +13,8 @@ services:
 
   web:
     build:
-      context: ./src/frontend
-      dockerfile: Dockerfile
+      context: .
+      dockerfile: ./bin/nginx/Dockerfile
     volumes:
       - ./src/frontend:/app
     ports:
@@ -32,7 +32,7 @@ services:
       MYSQL_PASSWORD: ${MYSQL_PASSWORD}
     volumes:
       - mysql-data:/var/lib/mysql
-      - ./mysql/init:/docker-entrypoint-initdb.d
+      - ./bin/mysql/init:/docker-entrypoint-initdb.d
     ports:
       - 3306:3306
 
